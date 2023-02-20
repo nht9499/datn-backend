@@ -1,0 +1,61 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "patientDoctorConnections",
+      "fields": [
+        {
+          "fieldPath": "patientUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "doctorUid",
+          "order": "ASCENDING"
+        }
+      ],
+      "queryScope": "COLLECTION"
+    },
+    {
+      "collectionGroup": "doctorMonthlyWorkSchedules",
+      "fields": [
+        {
+          "fieldPath": "doctorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "monthId",
+          "order": "ASCENDING"
+        }
+      ],
+      "queryScope": "COLLECTION"
+    },
+    {
+      "collectionGroup": "doctorMonthlyOccupations",
+      "fields": [
+        {
+          "fieldPath": "doctorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "monthId",
+          "order": "ASCENDING"
+        }
+      ],
+      "queryScope": "COLLECTION"
+    },
+    {
+      "collectionGroup": "patientMedicalRecords",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "appointmentId",
+          "order": "ASCENDING"
+        }
+      ],
+      "queryScope": "COLLECTION"
+    }
+  ],
+  "fieldOverrides": []
+}

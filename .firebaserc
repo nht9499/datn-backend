@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "datn-stag",
+    "staging": "datn-stag"
+  }
+}
