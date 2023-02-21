@@ -13,7 +13,7 @@ import { AppModule } from './app.module';
 import { AllExceptionFilter } from './filters/custom-exception.filter';
 import { initMock } from './mock/init-mock';
 import { CustomValidationPipe } from './pipes/custom-validation.pipe';
-import { onDoctorWrite, onPatientWrite } from './triggers/auth.trigger';
+import { onPatientWrite } from './triggers/auth.trigger';
 import {
   monthlySystemCheck,
   staleSystemsCheck,
@@ -82,7 +82,7 @@ export const api = region(appRegion)
     server(...args);
   });
 
-export { staleSystemsCheck, monthlySystemCheck, onDoctorWrite, onPatientWrite };
+export { staleSystemsCheck, monthlySystemCheck, onPatientWrite };
 // * ===== MOCK
 
 const isEmulator =

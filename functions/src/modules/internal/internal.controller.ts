@@ -3,8 +3,6 @@ import { CustomServerError } from '../../exceptions/custom-server.exception';
 import { CustomErrorFilter } from '../../filters/custom-exception.filter';
 import { checkSystemPeriodically } from '../../triggers/system.schedule';
 
-import { SettingsService } from '../settings/settings.service';
-
 const internalPasskey = 'skgkitor741304';
 
 @Controller('internal')

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { getAuth } from 'firebase-admin/auth';
 import { PatientStatus } from '../../constants/enum.constant';
 import { CustomServerError } from '../../exceptions/custom-server.exception';
-import { DoctorDto } from '../doctor/dtos/doctor.dto';
 import { AuthRepository } from '../shared/repositories/auth.repository';
 import { OrganizationRepository } from '../shared/repositories/organization.repository';
 import { UserRepository } from '../shared/repositories/user.repository';

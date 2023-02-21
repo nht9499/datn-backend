@@ -16,7 +16,6 @@ import {
 import { CustomErrorFilter } from '../../filters/custom-exception.filter';
 import { AuthRoleGuard } from '../../guards/auth-role.guard';
 import { AuthGuard } from '../../guards/auth.guard';
-import { DoctorDto } from '../doctor/dtos/doctor.dto';
 import { SimilarService } from './similar.service';
 
 @Controller('tests')
@@ -33,15 +32,22 @@ export class SimilarController {
       testList: [];
       organizationUid: string | null;
       type: string;
+      numberOfKeyword?: number;
+      numberOfResult?: number;
     }
   ): Promise<void> {
-    const { testList, organizationUid, type } = dto;
+    const { testList, organizationUid, type, numberOfKeyword, numberOfResult } =
+      dto;
     const payload = {
       userUid: user.token.uid,
       organizationUid,
       testList: testList,
       type,
+      numberOfKeyword: 3,
+      numberOfResult: 1,
     };
+    if (type === 'internet') payload.numberOfKeyword = numberOfKeyword ?? 3;
+    payload.numberOfResult = numberOfResult ?? 3;
     await this.similarService.executeTest(payload);
   }
 }

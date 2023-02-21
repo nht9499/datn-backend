@@ -27,8 +27,17 @@ export class SimilarService {
     organizationUid: string | null;
     testList: string[];
     type: string;
+    numberOfKeyword: number;
+    numberOfResult: number;
   }): Promise<void> {
-    const { userUid, organizationUid, testList, type } = args;
+    const {
+      userUid,
+      organizationUid,
+      testList,
+      type,
+      numberOfKeyword,
+      numberOfResult,
+    } = args;
     const now = Timestamp.now();
     let count = 0;
     let templateList: string[] = [];
@@ -53,8 +62,8 @@ export class SimilarService {
         const payload = {
           user: userUid,
           testFile: test,
-          number_of_keyword: 3,
-          number_of_result: 1,
+          number_of_keyword: numberOfKeyword,
+          number_of_result: numberOfResult,
         };
         res = await axios.post(
           'http://127.0.0.1:8000/api/search_on_internet/',
