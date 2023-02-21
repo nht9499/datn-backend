@@ -34,10 +34,17 @@ export class SimilarController {
       type: string;
       numberOfKeyword?: number;
       numberOfResult?: number;
+      sendEmail: boolean;
     }
   ): Promise<void> {
-    const { testList, organizationUid, type, numberOfKeyword, numberOfResult } =
-      dto;
+    const {
+      testList,
+      organizationUid,
+      type,
+      numberOfKeyword,
+      numberOfResult,
+      sendEmail,
+    } = dto;
     const payload = {
       userUid: user.token.uid,
       organizationUid,
@@ -45,6 +52,7 @@ export class SimilarController {
       type,
       numberOfKeyword: 3,
       numberOfResult: 1,
+      sendEmail,
     };
     if (type === 'internet') payload.numberOfKeyword = numberOfKeyword ?? 3;
     payload.numberOfResult = numberOfResult ?? 3;

@@ -31,6 +31,7 @@ export class SimilarService {
     type: string;
     numberOfKeyword: number;
     numberOfResult: number;
+    sendEmail: boolean;
   }): Promise<void> {
     const {
       userUid,
@@ -39,6 +40,7 @@ export class SimilarService {
       type,
       numberOfKeyword,
       numberOfResult,
+      sendEmail,
     } = args;
     const now = Timestamp.now();
     let count = 0;
@@ -104,8 +106,9 @@ export class SimilarService {
         newUserCount: 0,
         testCount: 1,
       });
+      const uid = generateNanoid();
       const schema: SimilarSchema = {
-        uid: generateNanoid(),
+        uid,
         createdAt: now,
         updatedAt: now,
         userUid,
@@ -116,16 +119,18 @@ export class SimilarService {
         matchPercent: res.data.matchPercent ?? 0,
       };
       await this.testRepository.createTestResult(schema);
-      if (count === testList.length - 1) {
-        await this.emailService.sendEmail({
-          to: user.email ?? 'nht9499@gmail.com',
-          subject: `Kết quả kiểm tra tương đồng ${formatDateToString(
-            new Date()
-          )}`,
-          html: 'Kết quả kiểm tra của bạn đã sẵn sàng hãy click <a href="http://localhost:3001/history" style="text-decoration: none;"> vào đây</a> để xem',
-        });
+      if (sendEmail) {
+        if (count === testList.length - 1) {
+          await this.emailService.sendEmail({
+            to: user.email ?? 'nht9499@gmail.com',
+            subject: `Kết quả kiểm tra tương đồng ${formatDateToString(
+              new Date()
+            )}`,
+            html: `Kết quả kiểm tra của bạn đã sẵn sàng hãy click <a href="http://localhost:3001/histories/${uid}" style="text-decoration: none;"> vào đây</a> để xem`,
+          });
+        }
+        count++;
       }
-      count++;
     });
   }
 }
