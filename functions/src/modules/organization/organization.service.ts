@@ -9,13 +9,16 @@ import { FileUploadDto } from './dtos/file-upload.dto';
 import { OrganizationWriteDto } from './dtos/organization-write.dto';
 import { generateNanoid } from '../../utils/random.util';
 import fs from 'fs';
+import { formatDateToMonthId } from '../../utils/date.util';
+import { SaleStatisticsByYearRepository } from '../shared/repositories/sales-statistics-by-year.repository';
 
 @Injectable()
 export class OrganizationService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly authRepository: AuthRepository,
-    private readonly organizationRepository: OrganizationRepository
+    private readonly organizationRepository: OrganizationRepository,
+    private readonly saleStatisticsByYearRepository: SaleStatisticsByYearRepository
   ) {}
 
   async createOrganization(
@@ -207,7 +210,7 @@ export class OrganizationService {
     });
     console.log(filePath);
     if (isTemplate) {
-      this.organizationRepository.addFile({
+      await this.organizationRepository.addFile({
         organizationUid,
         file: {
           uid: generateNanoid(),
@@ -219,6 +222,12 @@ export class OrganizationService {
         },
       });
     }
+    await this.saleStatisticsByYearRepository.updateStatistics({
+      monthId: formatDateToMonthId(new Date()),
+      fileCount: 1,
+      newUserCount: 0,
+      testCount: 0,
+    });
     return filePath;
   }
 

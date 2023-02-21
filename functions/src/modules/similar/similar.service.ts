@@ -7,11 +7,12 @@ import { OrganizationRepository } from '../shared/repositories/organization.repo
 import { TestRepository } from '../shared/repositories/test.repository';
 import { EmailService } from '../email/email.service';
 import { generateNanoid } from '../../utils/random.util';
-import { formatDateToString } from '../../utils/date.util';
+import { formatDateToString, formatDateToMonthId } from '../../utils/date.util';
 import axios from 'axios';
 import fs from 'fs';
 import { SimilarSchema } from './schemas/similar.schema';
 import { Timestamp } from 'firebase-admin/firestore';
+import { SaleStatisticsByYearRepository } from '../shared/repositories/sales-statistics-by-year.repository';
 
 @Injectable()
 export class SimilarService {
@@ -19,7 +20,8 @@ export class SimilarService {
     private readonly userRepository: UserRepository,
     private readonly organizationRepository: OrganizationRepository,
     private readonly testRepository: TestRepository,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly saleStatisticsByYearRepository: SaleStatisticsByYearRepository
   ) {}
 
   async executeTest(args: {
@@ -96,6 +98,12 @@ export class SimilarService {
           if (err) throw err;
         }
       );
+      await this.saleStatisticsByYearRepository.updateStatistics({
+        monthId: formatDateToMonthId(new Date()),
+        fileCount: 0,
+        newUserCount: 0,
+        testCount: 1,
+      });
       const schema: SimilarSchema = {
         uid: generateNanoid(),
         createdAt: now,

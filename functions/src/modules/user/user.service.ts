@@ -9,13 +9,16 @@ import { UserRepository } from '../shared/repositories/user.repository';
 import { FileUploadDto } from './dtos/file-upload.dto';
 import { UserWriteDto } from './dtos/user-write.dto';
 import fs from 'fs';
+import { formatDateToMonthId } from '../../utils/date.util';
+import { SaleStatisticsByYearRepository } from '../shared/repositories/sales-statistics-by-year.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly authRepository: AuthRepository,
-    private readonly organizationRepository: OrganizationRepository
+    private readonly organizationRepository: OrganizationRepository,
+    private readonly saleStatisticsByYearRepository: SaleStatisticsByYearRepository
   ) {}
 
   async registerUser(uid: string, dto: UserWriteDto): Promise<void> {
@@ -30,9 +33,16 @@ export class UserService {
     if (user) return;
 
     await Promise.all([
+      this.saleStatisticsByYearRepository.updateStatistics({
+        monthId: formatDateToMonthId(new Date()),
+        fileCount: 0,
+        newUserCount: 1,
+        testCount: 0,
+      }),
       this.userRepository.createUser(schemaToCreate),
       this.authRepository.addRoleToCustomClaims(uid, 'user'),
     ]);
+    return;
   }
   async createStaff(uid: string, dto: UserWriteDto): Promise<void> {
     // const userRecord = await getAuth().getUser(uid);
@@ -126,6 +136,12 @@ export class UserService {
         },
       });
     }
+    await this.saleStatisticsByYearRepository.updateStatistics({
+      monthId: formatDateToMonthId(new Date()),
+      fileCount: 1,
+      newUserCount: 0,
+      testCount: 0,
+    });
     return filePath;
   }
 

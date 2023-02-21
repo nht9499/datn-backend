@@ -5,6 +5,7 @@ import { logDebug } from '../utils/logger.util';
 import { UserRepository } from '../modules/shared/repositories/user.repository';
 import { OrganizationRepository } from '../modules/shared/repositories/organization.repository';
 import { UserService } from '../modules/user/user.service';
+import { SaleStatisticsByYearRepository } from '../modules/shared/repositories/sales-statistics-by-year.repository';
 
 const LOG_TYPE = 'MOCK';
 const MOCK_FIRESTORE_INFO = {
@@ -47,10 +48,12 @@ export const initMock = async () => {
 
   const userRepository = new UserRepository();
   const organizationRepository = new OrganizationRepository();
+  const saleStatisticsByYearRepository = new SaleStatisticsByYearRepository();
   const userService = new UserService(
     userRepository,
     authRepository,
-    organizationRepository
+    organizationRepository,
+    saleStatisticsByYearRepository
   );
 
   await getAuth().createUser({
@@ -61,6 +64,7 @@ export const initMock = async () => {
   await userService.createStaff('mock-staff-uid', {
     email: 'nht9499@gmail.com',
   });
+  await saleStatisticsByYearRepository.createMockStatistic();
 
   logDebug(LOG_TYPE, 'Mock finished!');
 };
