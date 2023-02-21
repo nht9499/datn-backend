@@ -60,11 +60,11 @@ export class OrganizationRepository {
       (member) => userUid === member.uid
     );
     if (foundIndex !== -1) {
-      organization.data.splice(foundIndex, 1);
+      organization.memberList.splice(foundIndex, 1);
     }
 
     await this.updateOrganization(organizationUid, {
-      memberList: FieldValue.arrayRemove(userUid),
+      memberList: organization.memberList,
     });
   }
 
@@ -90,10 +90,27 @@ export class OrganizationRepository {
     userUid: string;
   }): Promise<void> {
     const { organizationUid, userUid } = args;
+    const organization = await this.getOrganization(organizationUid);
+    if (!organization) return;
+    const foundIndex = organization.adminUidList.findIndex(
+      (admin) => userUid === admin
+    );
+    if (foundIndex !== -1) {
+      organization.adminUidList.splice(foundIndex, 1);
+    }
+
+    const foundMemberIndex = organization.memberList.findIndex(
+      (member) => userUid === member.uid
+    );
+    if (foundMemberIndex !== -1) {
+      organization.memberList.splice(foundMemberIndex, 1);
+    }
 
     await this.updateOrganization(organizationUid, {
-      // memberUidList: FieldValue.arrayRemove(userUid),
-      adminUidList: FieldValue.arrayRemove(userUid),
+      memberList: organization.memberList,
+    });
+    await this.updateOrganization(organizationUid, {
+      adminUidList: organization.adminUidList,
     });
   }
 

@@ -39,6 +39,9 @@ export class OrganizationService {
         organization: {
           uid: schemaToCreate.uid,
           name: schemaToCreate.fullName,
+          email: schemaToCreate.email ?? null,
+          phoneNumber: schemaToCreate.phoneNumber ?? null,
+          status: 'activated',
         },
       }),
     ]);
@@ -143,6 +146,9 @@ export class OrganizationService {
         organization: {
           uid: foundOrganization.uid,
           name: foundOrganization.fullName,
+          email: foundOrganization.email ?? null,
+          phoneNumber: foundOrganization.phoneNumber ?? null,
+          status: 'activated',
         },
       }),
       this.organizationRepository.addAdmin({

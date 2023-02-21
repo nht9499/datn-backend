@@ -43,6 +43,7 @@ export class OrganizationWriteDto {
       status: 'activated',
       fullName: dto.fullName,
       email: dto.email,
+      phoneNumber: dto.phoneNumber,
       searchableKeywordList: dto.fullName
         ? convertFullNameToKeywordList(dto.fullName)
         : [],

@@ -21,6 +21,7 @@ export interface OrganizationSchema {
   status: DoctorStatus;
   fullName: string;
   email?: string | null;
+  phoneNumber?: string | null;
   searchableKeywordList: string[];
   memberList: UserListSchema[];
   adminUidList: string[];

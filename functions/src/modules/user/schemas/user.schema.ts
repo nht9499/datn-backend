@@ -13,6 +13,9 @@ interface DataSchema {
 interface OrganizationSnapshotSchema {
   uid: string;
   name: string;
+  email?: string;
+  phoneNumber?: string;
+  status: string;
   isAdmin: boolean;
 }
 
