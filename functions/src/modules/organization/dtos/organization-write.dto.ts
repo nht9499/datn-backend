@@ -12,6 +12,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 import { convertFullNameToKeywordList } from '../../../utils/string.util';
 import { OrganizationSchema } from '../schemas/organization.schema';
 import { v4 as uuidv4 } from 'uuid';
+import { user } from 'firebase-functions/v1/auth';
 
 export class OrganizationWriteDto {
   @IsString()
@@ -28,9 +29,10 @@ export class OrganizationWriteDto {
 
   static toSchemaCreate(args: {
     userUid: string;
+    userEmail: string | null;
     dto: OrganizationWriteDto;
   }): OrganizationSchema {
-    const { userUid, dto } = args;
+    const { userUid, dto, userEmail } = args;
 
     const nowTimestamp = Timestamp.now();
 
@@ -45,7 +47,12 @@ export class OrganizationWriteDto {
         ? convertFullNameToKeywordList(dto.fullName)
         : [],
       data: [],
-      memberUidList: [userUid],
+      memberList: [
+        {
+          uid: userUid,
+          email: userEmail,
+        },
+      ],
       adminUidList: [userUid],
     };
   }

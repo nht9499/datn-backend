@@ -24,9 +24,11 @@ export class OrganizationService {
     dto: OrganizationWriteDto
   ): Promise<void> {
     // const userRecord = await getAuth().getUser(uid);
+    const user = await this.userRepository.getUser(userUid);
 
     const schemaToCreate = OrganizationWriteDto.toSchemaCreate({
       userUid,
+      userEmail: user?.email ?? null,
       dto,
     });
 
@@ -68,11 +70,14 @@ export class OrganizationService {
         organization: {
           uid: foundOrganization.uid,
           name: foundOrganization.fullName,
+          email: foundOrganization.email ?? null,
+          status: 'activated',
         },
       }),
       this.organizationRepository.addUserToOrganization({
         organizationUid,
         userUid,
+        userEmail: foundUser.email ?? null,
       }),
     ]);
   }
@@ -143,6 +148,7 @@ export class OrganizationService {
       this.organizationRepository.addAdmin({
         organizationUid,
         userUid,
+        userEmail: foundUser.email ?? null,
       }),
     ]);
   }

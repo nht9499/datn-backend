@@ -89,11 +89,14 @@ export class UserService {
         organization: {
           uid: foundOrganization.uid,
           name: foundOrganization.fullName,
+          email: foundOrganization.email ?? null,
+          status: 'activated',
         },
       }),
       this.organizationRepository.addUserToOrganization({
         organizationUid,
         userUid,
+        userEmail: foundUser.email ?? null,
       }),
     ]);
   }

@@ -36,11 +36,16 @@ export class OrganizationRepository {
   async addUserToOrganization(args: {
     organizationUid: string;
     userUid: string;
+    userEmail: string | null;
   }): Promise<void> {
-    const { organizationUid, userUid } = args;
+    const { organizationUid, userUid, userEmail } = args;
+    const schema = {
+      uid: userUid,
+      email: userEmail,
+    };
 
     await this.updateOrganization(organizationUid, {
-      memberUidList: FieldValue.arrayUnion(userUid),
+      memberList: FieldValue.arrayUnion(schema),
     });
   }
 
@@ -49,20 +54,33 @@ export class OrganizationRepository {
     userUid: string;
   }): Promise<void> {
     const { organizationUid, userUid } = args;
+    const organization = await this.getOrganization(organizationUid);
+    if (!organization) return;
+    const foundIndex = organization.memberList.findIndex(
+      (member) => userUid === member.uid
+    );
+    if (foundIndex !== -1) {
+      organization.data.splice(foundIndex, 1);
+    }
 
     await this.updateOrganization(organizationUid, {
-      memberUidList: FieldValue.arrayRemove(userUid),
+      memberList: FieldValue.arrayRemove(userUid),
     });
   }
 
   async addAdmin(args: {
     organizationUid: string;
     userUid: string;
+    userEmail: string | null;
   }): Promise<void> {
-    const { organizationUid, userUid } = args;
+    const { organizationUid, userUid, userEmail } = args;
+    const schema = {
+      uid: userUid,
+      email: userEmail,
+    };
 
     await this.updateOrganization(organizationUid, {
-      memberUidList: FieldValue.arrayUnion(userUid),
+      memberList: FieldValue.arrayUnion(schema),
       adminUidList: FieldValue.arrayUnion(userUid),
     });
   }

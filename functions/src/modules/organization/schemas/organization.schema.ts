@@ -9,6 +9,10 @@ interface DataSchema {
   status: DoctorStatus;
   sharedToSystem: boolean;
 }
+interface UserListSchema {
+  uid: string;
+  email: string | null;
+}
 
 export interface OrganizationSchema {
   uid: string;
@@ -18,7 +22,7 @@ export interface OrganizationSchema {
   fullName: string;
   email?: string | null;
   searchableKeywordList: string[];
-  memberUidList: string[];
+  memberList: UserListSchema[];
   adminUidList: string[];
   data: DataSchema[];
 }

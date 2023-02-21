@@ -36,12 +36,16 @@ export class UserRepository {
     organization: {
       uid: string;
       name: string;
+      email: string | null;
+      status: string;
     };
   }): Promise<void> {
     const { userUid, organization } = args;
     const OrganizationSnapshotSchema = {
       uid: organization.uid,
       name: organization.name,
+      email: organization.email,
+      status: organization.status,
       isAdmin: false,
     };
     await this.updateUser(userUid, {
