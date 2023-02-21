@@ -57,24 +57,32 @@ export class SaleStatisticsByYearRepository {
       .doc(yearId);
     const newDate = new Date();
     const mockData: SaleStatisticsByYear = {
-      totalUserThisYear: 9,
+      totalUserThisYear: 25,
       statisticsByMonthList: [
         {
           monthId: formatDateToMonthId(
-            new Date(new Date().setMonth(newDate.getMonth() - 1))
+            new Date(new Date().setMonth(newDate.getMonth() - 3))
           ),
           fileCount: 27,
           newUserCount: 9,
           testCount: 15,
         },
-        // {
-        //   monthId: formatDateToMonthId(
-        //     new Date(new Date().setMonth(newDate.getMonth() - 2))
-        //   ),
-        //   fileCount: 34,
-        //   newUserCount: 14,
-        //   testCount: 20,
-        // },
+        {
+          monthId: formatDateToMonthId(
+            new Date(new Date().setMonth(newDate.getMonth() - 2))
+          ),
+          fileCount: 34,
+          newUserCount: 14,
+          testCount: 20,
+        },
+        {
+          monthId: formatDateToMonthId(
+            new Date(new Date().setMonth(newDate.getMonth() - 1))
+          ),
+          fileCount: 34,
+          newUserCount: 2,
+          testCount: 30,
+        },
       ],
     };
     docRef.set(mockData);
