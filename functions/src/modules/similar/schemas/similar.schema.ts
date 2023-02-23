@@ -12,7 +12,6 @@ interface DataSchema {
 interface OrganizationSnapshotSchema {
   uid: string;
   name: string;
-  isAdmin: boolean;
 }
 
 export interface SimilarSchema {
@@ -25,4 +24,6 @@ export interface SimilarSchema {
   dataTemplateUrl: string;
   status: string;
   matchPercent: number;
+  type: string;
+  language: string[];
 }

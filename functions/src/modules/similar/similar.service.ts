@@ -117,7 +117,26 @@ export class SimilarService {
         dataTemplateUrl: templateFilePath,
         status: 'done',
         matchPercent: res.data.matchPercent ?? 0,
+        type,
+        language: [],
       };
+      if (type === 'organization' && organizationUid) {
+        const organization = await this.organizationRepository.getOrganization(
+          organizationUid
+        );
+        if (!organization) return;
+        schema.organizationSnapshot = {
+          uid: organization.uid,
+          name: organization.fullName,
+        };
+      }
+      res.data.testFile.map((file: any) => {
+        file.info.map((info: any) => {
+          if (!schema.language.includes(info.type)) {
+            schema.language.push(info.type);
+          }
+        });
+      });
       await this.testRepository.createTestResult(schema);
       if (sendEmail) {
         if (count === testList.length - 1) {
