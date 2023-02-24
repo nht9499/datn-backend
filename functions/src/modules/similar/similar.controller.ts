@@ -56,6 +56,7 @@ export class SimilarController {
     };
     if (type === 'internet') payload.numberOfKeyword = numberOfKeyword ?? 3;
     payload.numberOfResult = numberOfResult ?? 3;
-    await this.similarService.executeTest(payload);
+    this.similarService.executeTest(payload);
+    return;
   }
 }

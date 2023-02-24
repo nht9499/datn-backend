@@ -64,10 +64,12 @@ export class SimilarService {
     if (type === 'internet') {
       const payload = {
         user: userUid,
+        threshold: 0.8,
         testFile: testList,
         number_of_keyword: numberOfKeyword,
         number_of_result: numberOfResult,
       };
+      console.log(payload);
       res = await axios.post(
         'http://127.0.0.1:8000/api/search_on_internet/',
         payload
