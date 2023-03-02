@@ -20,6 +20,14 @@ export class UserRepository {
 
     return (docSnapshot.data() as UserSchema | undefined) ?? null;
   }
+  async getUserByEmail(email: string): Promise<UserSchema | null> {
+    const querySnapshot = await getFirestore()
+      .collection(COLLECTION_USERS.name)
+      .where('email', '==', email)
+      .get();
+
+    return (querySnapshot.docs[0].data() as UserSchema | undefined) ?? null;
+  }
 
   async updateUser(
     userUid: string,

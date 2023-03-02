@@ -48,6 +48,20 @@ export class OrganizationController {
       organizationUid,
     });
   }
+  @Post('/:organizationUid/add-member-by-email')
+  async addMemberByEmail(
+    // @AppFirebaseUser() user: AppFirebaseUserDto,
+    @Param('organizationUid') organizationUid: string,
+    @Body()
+    dto: {
+      email: string;
+    }
+  ): Promise<void> {
+    return await this.organizationService.addMemberByEmail({
+      email: dto.email,
+      organizationUid,
+    });
+  }
   @Post('/:organizationUid/remove-member/:userUid')
   async removeMember(
     // @AppFirebaseUser() user: AppFirebaseUserDto,
@@ -67,6 +81,20 @@ export class OrganizationController {
   ): Promise<void> {
     return await this.organizationService.addAdmin({
       userUid,
+      organizationUid,
+    });
+  }
+  @Post('/:organizationUid/add-admin-by-email')
+  async addAdminByEmail(
+    // @AppFirebaseUser() user: AppFirebaseUserDto,
+    @Param('organizationUid') organizationUid: string,
+    @Body()
+    dto: {
+      email: string;
+    }
+  ): Promise<void> {
+    return await this.organizationService.addAdminByEmail({
+      email: dto.email,
       organizationUid,
     });
   }

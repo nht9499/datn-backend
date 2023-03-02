@@ -86,6 +86,43 @@ export class OrganizationService {
       }),
     ]);
   }
+  async addMemberByEmail(args: { email: string; organizationUid: string }) {
+    const { email, organizationUid } = args;
+
+    const [foundOrganization, foundUser] = await Promise.all([
+      this.organizationRepository.getOrganization(organizationUid),
+      this.userRepository.getUserByEmail(email),
+    ]);
+
+    if (foundOrganization == null) {
+      throw new CustomServerError({
+        message: 'doctor/not-found',
+      });
+    }
+
+    if (foundUser == null) {
+      throw new CustomServerError({
+        message: 'patient/not-found',
+      });
+    }
+
+    await Promise.all([
+      this.userRepository.addOrganizationToUser({
+        userUid: foundUser.uid,
+        organization: {
+          uid: foundOrganization.uid,
+          name: foundOrganization.fullName,
+          email: foundOrganization.email ?? null,
+          status: 'activated',
+        },
+      }),
+      this.organizationRepository.addUserToOrganization({
+        organizationUid,
+        userUid: foundUser.uid,
+        userEmail: foundUser.email ?? null,
+      }),
+    ]);
+  }
 
   async removeMember(args: { userUid: string; organizationUid: string }) {
     const { userUid, organizationUid } = args;
@@ -156,6 +193,44 @@ export class OrganizationService {
       this.organizationRepository.addAdmin({
         organizationUid,
         userUid,
+        userEmail: foundUser.email ?? null,
+      }),
+    ]);
+  }
+  async addAdminByEmail(args: { email: string; organizationUid: string }) {
+    const { email, organizationUid } = args;
+
+    const [foundOrganization, foundUser] = await Promise.all([
+      this.organizationRepository.getOrganization(organizationUid),
+      this.userRepository.getUserByEmail(email),
+    ]);
+
+    if (foundOrganization == null) {
+      throw new CustomServerError({
+        message: 'doctor/not-found',
+      });
+    }
+
+    if (foundUser == null) {
+      throw new CustomServerError({
+        message: 'patient/not-found',
+      });
+    }
+
+    await Promise.all([
+      this.userRepository.addOrganizationToUserAdmin({
+        userUid: foundUser.uid,
+        organization: {
+          uid: foundOrganization.uid,
+          name: foundOrganization.fullName,
+          email: foundOrganization.email ?? null,
+          phoneNumber: foundOrganization.phoneNumber ?? null,
+          status: 'activated',
+        },
+      }),
+      this.organizationRepository.addAdmin({
+        organizationUid,
+        userUid: foundUser.uid,
         userEmail: foundUser.email ?? null,
       }),
     ]);
