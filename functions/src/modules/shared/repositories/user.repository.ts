@@ -26,6 +26,7 @@ export class UserRepository {
       .where('email', '==', email)
       .get();
 
+    if (querySnapshot.docs.length === 0) return null;
     return (querySnapshot.docs[0].data() as UserSchema | undefined) ?? null;
   }
 
